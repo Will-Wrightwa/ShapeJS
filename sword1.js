@@ -16,32 +16,37 @@ function main(args) { //---------------Start Main------------
 	//var scl = args.scale;
 	var blWidth = 8*MM;
 	var blTh = 2.51*MM;
-	var blL = 60*MM;
+	var blL = 80*MM;
+    var tipScale = 8;
+    var tipL = (blTh * tipScale)/2;
 	
 	
 	
 	var v1 = new Vector3d(0,0,0);
-	var v2 = new Vector3d(0,0,3*MM);
+	var v2 = new Vector3d(0,0,blL);
 	var blStock = new Cylinder(v1,v2,blTh/2);
 	
 	var scl = new Scale(4,1,1);
 	blStock.setTransform(scl);
 	var blTip = new Sphere(blTh/2);
-	scl2 = new Scale(4,1,8);
+	scl2 = new Scale(4,1,tipScale);
 	blTip.setTransform(scl2);
 	
 	var blade = new Union();
 	blade.add(blStock);
 	blade.add(blTip);
-	
-	//var out = new Sphere(5);
+	blade.setTransform(new Translation(0,0,tipL));
+      
+      
+	//var spr = new Sphere(5*MM);
+  
 	var out = blade;
 	
 	
   
-	var w = 5*MM;
+	var w = 1*MM;
   var myBounds = new Bounds(-w,w,-w,w,-w,w);
-	var bounds = new Bounds(-10*MM,10*MM,-blTh,blTh,-w,w);
+	var bounds = new Bounds(-10*MM,10*MM,-blTh,blTh,-0,blL+(tipL));
   return new Scene(out, bounds);
   
   //----------------------------------functions---------------
@@ -50,3 +55,26 @@ function main(args) { //---------------Start Main------------
 
 }//-----------------------------------End Main-----------------
 
+//Draft model given degrees in Z direction parting line xy plane.
+function draft(model,angleDeg){
+	
+    var r = 360/((2*Math.PI)*Math.abs(angleDeg))*MM;  
+ 
+	//var rotate = new Rotation(0,1,0,Math.PI/2,model.getCenter());
+	var trans = new Rotation(0,1,0,Math.PI);
+	
+	var rWrap = new RingWrap(r);
+	var out = new DataTransformer(model);
+    var ct = new CompositeTransform();
+  if(angleDeg <= 0){
+    ct.add(trans);
+  }
+    ct.add(rWrap);
+    ct.add(new Translation(0,0,-r));
+  if(angleDeg <= 0){
+    ct.add(trans);
+  }
+    
+    out.setTransform(ct);
+	return out;
+}

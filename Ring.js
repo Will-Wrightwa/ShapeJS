@@ -16,23 +16,22 @@ var uiParams = [
     }
 ];
 
-function main(args) { //-------------------------Start Main
+function main(args) { //---------------Start Main------------
 	
-	var ringSize = 5;
+	var ringSize = args.profile;
 	var width = 5*MM;
 	var height = 1.7*MM;
 	
-	var s = 10* MM;
-	
-	var stock = new Image3D(args.profile,width,height,getC());
-	stock.setUseGrayscale(false);
 	
 	
-  var out = stock;
+	
+	
+  var out = revolve(args.profile,width,height);
+	var w = getR()+height;
+  var myBounds = new Bounds();
+  return new Scene(out, new Bounds(-w,w,-width,width,-w,w));
   
-  return new Scene(out, new Bounds(-s,s,-s,s,-s,s));
-  
-  
+  //----------------------------------functions---------------
   
   
   function getD(){
@@ -44,5 +43,23 @@ function getC(){
 function getR(){
 	return getD()/2;
 }
-}//------------------------------End Main---------------------------
+	function revolve(img,width,height){
+		// extrude stock along z
+		var stock = new Image3D(img,width,height,getC());
+		stock.setUseGrayscale(false);
+		var ct = new CompositeTransform();
+		var x90 = new Rotation(1,0,0,Math.PI/2);
+		var y90 = new Rotation(0,1,0,-Math.PI/2);
+		var z90 = new Rotation(0,0,1,Math.PI/2);
+		rotate 
+		ct.add(z90);
+		ct.add(y90);
+		ct.add(new translation(0,0,height/2))
+		var rWrap = new RingWrap(getR());
+		ct.add(rWrap);
+		stock.setTransform(ct);
+		return stock;
+		
+	}
+}//-----------------------------------End Main-----------------
 

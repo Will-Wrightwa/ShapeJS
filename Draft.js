@@ -19,9 +19,7 @@ function main(args) { //---------------Start Main------------
 function draft(model,angleDeg){
 	
     var r = 360/((2*Math.PI)*Math.abs(angleDeg))*MM;  
-  
-	
-	
+ 
 	//var rotate = new Rotation(0,1,0,Math.PI/2,model.getCenter());
 	var trans = new Rotation(0,1,0,Math.PI);
 	
