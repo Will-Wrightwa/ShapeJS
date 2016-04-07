@@ -7,12 +7,13 @@ function main(args) { //---------------Start Main------------
 	
 	
 	
-	var sword = swordShape(80*MM,8*MM,2.51*MM,10*MM,0.1,0.1);
+	var sword = swordShape(80*MM,8*MM,2.51*MM,14*MM,0.5,0.1);
   
   
 	var s = 20*MM;
 	var bounds = new Bounds(-s,s,-s,s,-s,s);
-  return new Scene(sword, bounds);
+  var bounds2 = new Bounds(-10*MM,10*MM,-20.51*MM,20.51*MM,-0,80*MM);
+  return new Scene(sword, bounds2);
   
 
 }//-----------------------------------End Main---------------
@@ -53,9 +54,12 @@ function swordShape(OverallLength,width,thickness,tipLength,profileTaperAngle,di
 	tip.setTransform(new Scale(widthScale,1,tipScale));
 	var sword = new Union(stock,tip);
 	sword.setTransform(new Translation(0,0,tipLength));
+    //sword = new DataTransformer(sword);
 	sword = draft(sword, profileTaperAngle);
+    sword = new DataTransformer(sword);
 	sword.setTransform(new Rotation(0,0,1,Math.PI/2));
 	sword = draft(sword, distalTaperAngle);
+    sword = new DataTransformer(sword);
 	sword.setTransform(new Rotation(0,0,1,-Math.PI/2));
 	sword = new DataTransformer(sword);
 	
