@@ -5,7 +5,7 @@ function main(args) { //---------------Start Main------------
   
   
   
-    var cb2 = draft(cb,1); 
+    var cb2 = draft(cb,20); 
   
   
 	var s = 20*MM;
@@ -18,13 +18,24 @@ function main(args) { //---------------Start Main------------
 //Draft model given degrees in Z direction parting line xy plane.
 function draft(model,angleDeg){
 	
-    var r = 360/((2*Math.PI)*angleDeg)*MM;  
+    var r = 360/((2*Math.PI)*Math.abs(angleDeg))*MM;  
   
+	
+	
+	//var rotate = new Rotation(0,1,0,Math.PI/2,model.getCenter());
+	var trans = new Rotation(0,1,0,Math.PI);
+	
 	var rWrap = new RingWrap(r);
 	var out = new DataTransformer(model);
     var ct = new CompositeTransform();
+  if(angleDeg <= 0){
+    ct.add(trans);
+  }
     ct.add(rWrap);
     ct.add(new Translation(0,0,-r));
+  if(angleDeg <= 0){
+    ct.add(trans);
+  }
     
     out.setTransform(ct);
 	return out;
