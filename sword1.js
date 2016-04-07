@@ -14,7 +14,8 @@ var uiParams = [
 function main(args) { //---------------Start Main------------
 	
 	//var scl = args.scale;
-	var blWidth = 8*MM;
+	//var blWidth = 6*MM;
+    var wScale = 3;
 	var blTh = 2.51*MM;
 	var blL = 80*MM;
     var tipScale = 8;
@@ -26,10 +27,10 @@ function main(args) { //---------------Start Main------------
 	var v2 = new Vector3d(0,0,blL);
 	var blStock = new Cylinder(v1,v2,blTh/2);
 	
-	var scl = new Scale(4,1,1);
+	var scl = new Scale(wScale,1,1);
 	blStock.setTransform(scl);
 	var blTip = new Sphere(blTh/2);
-	scl2 = new Scale(4,1,tipScale);
+	scl2 = new Scale(wScale,1,tipScale);
 	blTip.setTransform(scl2);
 	
 	var blade = new Union();
@@ -37,16 +38,19 @@ function main(args) { //---------------Start Main------------
 	blade.add(blTip);
 	blade.setTransform(new Translation(0,0,tipL));
       
-      
+    var blade2 = draft(blade,0.6);  
+    blade2.setTransform(new Rotation(0,0,1,Math.PI/2));
+    blade2 = draft(blade2,0.5);
+    blade2.setTransform(new Rotation(0,0,1,-Math.PI/2));
 	//var spr = new Sphere(5*MM);
   
-	var out = blade;
+	var out = blade2;
 	
 	
   
 	var w = 1*MM;
   var myBounds = new Bounds(-w,w,-w,w,-w,w);
-	var bounds = new Bounds(-10*MM,10*MM,-blTh,blTh,-0,blL+(tipL));
+	var bounds = new Bounds(-15*MM,15*MM,-blTh*2,blTh*2,-0,blL+(tipL));
   return new Scene(out, bounds);
   
   //----------------------------------functions---------------
@@ -76,5 +80,6 @@ function draft(model,angleDeg){
   }
     
     out.setTransform(ct);
-	return out;
+    out2 = new DataTransformer(out);
+	return out2;
 }
